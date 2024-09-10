@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+  </head>
+  <body>
+    <h2>微信号/QQ号/邮箱登录</h2>
+    <form id="loginForm">
+      <label for="username">账号:</label>
+      <input type="text" id="username" name="username" required /><br /><br />
+      <label for="password">密码:</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+      />
+      <button type="button" onclick="login()">Login</button>
+    </form>
+
+    <script>
+      async function login() {
+        // 获取用户输入
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // 构造请求体
+        const data = JSON.stringify({
+          username: username,
+          password: password,
+        });
+
+        // 发送POST请求到服务器
+        try {
+          const response = await fetch('api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: data,
+          });
+
+          // 检查响应状态
+          if (!response.ok) {
+            //throw new Error("Network response was not ok");
+          }
+
+          // 解析响应数据
+          const result = await response.json();
+
+          // 根据响应内容显示结果
+          if (result.success) {
+            alert('登录成功');
+            // 这里可以添加登录成功后的处理逻辑，比如页面跳转
+          } else {
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred during login');
+        }
+      }
+    </script>
+  </body>
+</html>
